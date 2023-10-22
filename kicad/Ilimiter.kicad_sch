@@ -340,6 +340,11 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 0cc1beca-1356-428b-9413-8a0877c42c98)
   )
+  (text "Note that just a current limiting resistor would be good enough, if we didn't have to worry about power comsumption"
+    (at 57.15 110.49 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 147ee5cb-2d33-4584-ac2d-b443867f6e76)
+  )
 
   (hierarchical_label "Vddin" (shape input) (at 73.66 82.55 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))

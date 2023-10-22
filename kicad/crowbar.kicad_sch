@@ -441,7 +441,7 @@
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid b1417cad-bf97-4567-8aaa-db55b546008f)
   )
-  (hierarchical_label "Vcc" (shape input) (at 74.93 93.98 180) (fields_autoplaced)
+  (hierarchical_label "Vss" (shape input) (at 74.93 93.98 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid b203aaed-0593-4112-8cda-41f2ae493759)
   )

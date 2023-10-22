@@ -342,6 +342,10 @@
     [
       "fc8dac7e-9819-43f4-862a-282958183a28",
       "Overvoltage & current protector"
+    ],
+    [
+      "e305aaec-b373-422a-b2cb-386e797e1bef",
+      "Oscillator"
     ]
   ],
   "text_variables": {}
