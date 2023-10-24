@@ -1,0 +1,208 @@
+
+(footprint SW_RB-231X2 (layer F.Cu) (tedit 65374317)
+  (descr "")
+  (fp_text reference REF** (at 5.02722 -3.13639 0) (layer F.SilkS)
+    (effects (font (size 1.00044094488 1.00044094488) (thickness 0.15)))
+  )
+  (fp_text value SW_RB-231X2 (at 8.636155 3.065415 0) (layer F.Fab)
+    (effects (font (size 1.00013385827 1.00013385827) (thickness 0.15)))
+  )
+  (pad None np_thru_hole circle (at 0.0 0.0) (size 0.4 0.4) (drill 0.4) (layers *.Cu *.Mask))
+  (pad 1 smd rect (at -0.4 0.0) (size 0.2 0.635) (layers F.Cu F.Mask F.Paste) (solder_mask_margin 0.102))
+  (pad 2 thru_hole circle (at -4.8 0.0) (size 1.508 1.508) (drill 1.0) (layers *.Cu *.Mask) (solder_mask_margin 0.102))
+  (fp_line (start -0.2 -1.5) (end 0.2 -1.5) (layer Edge.Cuts) (width 0.01))
+  (fp_line (start 0.2 -1.5) (end 0.2 1.5) (layer Edge.Cuts) (width 0.01))
+  (fp_line (start 0.2 1.5) (end -0.2 1.5) (layer Edge.Cuts) (width 0.01))
+  (fp_line (start -0.2 1.5) (end -0.2 -1.5) (layer Edge.Cuts) (width 0.01))
+  (fp_poly
+    (pts
+      (xy -0.60083 -1.8)
+      (xy -0.2 -1.8)
+      (xy -0.2 1.80249)
+      (xy -0.60083 1.80249)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.200292 -1.8)
+      (xy 0.6 -1.8)
+      (xy 0.6 1.80263)
+      (xy 0.200292 1.80263)
+    ) (layer F.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600155 -1.9)
+      (xy 0.6 -1.9)
+      (xy 0.6 -1.50039)
+      (xy -0.600155 -1.50039)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600932 1.5)
+      (xy 0.6 1.5)
+      (xy 0.6 1.90295)
+      (xy -0.600932 1.90295)
+    ) (layer F.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600784 -1.8)
+      (xy -0.2 -1.8)
+      (xy -0.2 1.80235)
+      (xy -0.600784 1.80235)
+    ) (layer F.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.200243 -1.8)
+      (xy 0.6 -1.8)
+      (xy 0.6 1.80219)
+      (xy 0.200243 1.80219)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600054 -1.9)
+      (xy 0.6 -1.9)
+      (xy 0.6 -1.50014)
+      (xy -0.600054 -1.50014)
+    ) (layer F.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600992 1.5)
+      (xy 0.6 1.5)
+      (xy 0.6 1.90314)
+      (xy -0.600992 1.90314)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600438 -1.8)
+      (xy -0.2 -1.8)
+      (xy -0.2 1.80131)
+      (xy -0.600438 1.80131)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600232 -1.9)
+      (xy 0.6 -1.9)
+      (xy 0.6 -1.50058)
+      (xy -0.600232 -1.50058)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.20036 -1.8)
+      (xy 0.6 -1.8)
+      (xy 0.6 1.80324)
+      (xy 0.20036 1.80324)
+    ) (layer F.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.60013 1.5)
+      (xy 0.6 1.5)
+      (xy 0.6 1.90041)
+      (xy -0.60013 1.90041)
+    ) (layer F.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.60102 -1.8)
+      (xy -0.2 -1.8)
+      (xy -0.2 1.80306)
+      (xy -0.60102 1.80306)
+    ) (layer F.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.6004 -1.9)
+      (xy 0.6 -1.9)
+      (xy 0.6 -1.501)
+      (xy -0.6004 -1.501)
+    ) (layer F.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.200258 -1.8)
+      (xy 0.6 -1.8)
+      (xy 0.6 1.80232)
+      (xy 0.200258 1.80232)
+    ) (layer B.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.60047 -1.8)
+      (xy -0.2 -1.8)
+      (xy -0.2 1.80141)
+      (xy -0.60047 1.80141)
+    ) (layer B.Cu) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600761 -1.8)
+      (xy -0.2 -1.8)
+      (xy -0.2 1.80228)
+      (xy -0.600761 1.80228)
+    ) (layer B.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.600897 1.5)
+      (xy 0.6 1.5)
+      (xy 0.6 1.90284)
+      (xy -0.600897 1.90284)
+    ) (layer B.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.601134 -1.9)
+      (xy 0.6 -1.9)
+      (xy 0.6 -1.50284)
+      (xy -0.601134 -1.50284)
+    ) (layer B.Paste) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.801081 -2.1)
+      (xy 0.8 -2.1)
+      (xy 0.8 2.10284)
+      (xy -0.801081 2.10284)
+    ) (layer F.Mask) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.800134 -2.1)
+      (xy 0.8 -2.1)
+      (xy 0.8 2.10035)
+      (xy -0.800134 2.10035)
+    ) (layer B.Mask) (width 0.01)
+  )
+  (fp_line (start 1.2 -2.0) (end 11.315 -2.0) (layer F.SilkS) (width 0.2))
+  (fp_line (start 11.315 -2.0) (end 11.315 2.0) (layer F.SilkS) (width 0.2))
+  (fp_line (start 11.315 2.0) (end 1.2 2.0) (layer F.SilkS) (width 0.2))
+  (fp_line (start 1.2 -2.0) (end 1.2 2.0) (layer F.SilkS) (width 0.2))
+  (fp_line (start 1.2 -2.0) (end 1.2 -2.5) (layer F.SilkS) (width 0.2))
+  (fp_line (start 1.2 -2.5) (end -1.05 -2.5) (layer F.SilkS) (width 0.2))
+  (fp_line (start 1.2 2.0) (end 1.2 2.5) (layer F.SilkS) (width 0.2))
+  (fp_line (start 1.2 2.5) (end -1.0 2.5) (layer F.SilkS) (width 0.2))
+  (fp_line (start -1.2 -0.2) (end -3.6 -0.2) (layer F.SilkS) (width 0.2))
+  (fp_line (start -3.6 0.2) (end -1.2 0.2) (layer F.SilkS) (width 0.2))
+  (fp_line (start -3.6 -0.2) (end -3.6 0.2) (layer F.SilkS) (width 0.2))
+  (fp_line (start 1.45 -2.75) (end 1.45 -2.25) (layer F.CrtYd) (width 0.05))
+  (fp_line (start 1.45 -2.25) (end 11.6 -2.25) (layer F.CrtYd) (width 0.05))
+  (fp_line (start 11.6 -2.25) (end 11.6 2.25) (layer F.CrtYd) (width 0.05))
+  (fp_line (start 11.6 2.25) (end 1.45 2.25) (layer F.CrtYd) (width 0.05))
+  (fp_line (start 1.45 2.25) (end 1.45 2.75) (layer F.CrtYd) (width 0.05))
+  (fp_line (start 1.45 2.75) (end -1.35 2.75) (layer F.CrtYd) (width 0.05))
+  (fp_line (start -1.35 2.75) (end -1.35 1.0) (layer F.CrtYd) (width 0.05))
+  (fp_line (start -1.35 1.0) (end -5.8 1.0) (layer F.CrtYd) (width 0.05))
+  (fp_line (start -5.8 1.0) (end -5.8 -1.0) (layer F.CrtYd) (width 0.05))
+  (fp_line (start -5.8 -1.0) (end -1.35 -1.0) (layer F.CrtYd) (width 0.05))
+  (fp_line (start -1.35 -1.0) (end -1.35 -2.75) (layer F.CrtYd) (width 0.05))
+  (fp_line (start -1.35 -2.75) (end 1.45 -2.75) (layer F.CrtYd) (width 0.05))
+)
