@@ -1664,7 +1664,7 @@
     (property "Value" "1S 3000mAh" (at 133.35 83.2485 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 129.54 82.296 90)
+    (property "Footprint" "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical" (at 129.54 82.296 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 129.54 82.296 90)
@@ -1804,7 +1804,7 @@
           (reference "U7") (unit 1)
         )
         (path "/9f6eb88e-d254-4b8d-b64f-838940a89234/50902c9c-c184-4e8b-b7c8-1add935d161c"
-          (reference "R1500H050B") (unit 1)
+          (reference "R1500H050B1") (unit 1)
         )
       )
     )

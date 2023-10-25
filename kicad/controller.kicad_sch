@@ -1984,7 +1984,7 @@
     (property "Value" "ESP32-DEVKITC" (at 161.29 80.01 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "ESP32-DEVKITC:MODULE_ESP32-DEVKITC" (at 161.29 107.95 0)
+    (property "Footprint" "ESP32-DEVKIT:MODULE_ESP32-DEVKITC" (at 161.29 107.95 0)
       (effects (font (size 1.27 1.27)) (justify bottom) hide)
     )
     (property "Datasheet" "" (at 161.29 107.95 0)
