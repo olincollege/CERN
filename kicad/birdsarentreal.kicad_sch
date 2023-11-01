@@ -2649,9 +2649,9 @@
     (property "Sim.Pins" "1=G 2=S 3=D" (at 184.15 73.66 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "3" (uuid 89bdcc42-7ea0-47b7-b14c-feda15a3e9d4))
     (pin "1" (uuid 6da4547d-1eee-4c97-944d-346455dc8f6c))
     (pin "2" (uuid 35e27b13-09eb-4561-9086-5743d499cfaa))
+    (pin "3" (uuid 89bdcc42-7ea0-47b7-b14c-feda15a3e9d4))
     (instances
       (project "robot"
         (path "/9f6eb88e-d254-4b8d-b64f-838940a89234/50902c9c-c184-4e8b-b7c8-1add935d161c"
@@ -2670,7 +2670,7 @@
     (property "Value" "1S 3000mAh" (at 142.24 83.82 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical" (at 138.43 82.296 90)
+    (property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical" (at 138.43 82.296 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 138.43 82.296 90)
@@ -2743,9 +2743,9 @@
     (property "Sim.Pins" "1=G 2=S 3=D" (at 161.29 87.63 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "3" (uuid cbd17f14-aace-4106-9f9a-190d8f325089))
     (pin "1" (uuid 922f8124-08f0-4f82-8592-21b0d4949125))
     (pin "2" (uuid 33967ac0-0b23-4339-8308-0ac12186a415))
+    (pin "3" (uuid cbd17f14-aace-4106-9f9a-190d8f325089))
     (instances
       (project "robot"
         (path "/9f6eb88e-d254-4b8d-b64f-838940a89234/50902c9c-c184-4e8b-b7c8-1add935d161c"
