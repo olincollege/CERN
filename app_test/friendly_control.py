@@ -1,39 +1,39 @@
 import sys
 import pygame
-import bluetooth
+# import bluetooth
 import subprocess
 import time
 from serial import Serial
 
 
-def connect_to_device(device_mac):
-    # Search for the device with the specified MAC address
-    nearby_devices = bluetooth.discover_devices(lookup_names=True, lookup_class=True)
+# def connect_to_device(device_mac):
+#     # Search for the device with the specified MAC address
+#     nearby_devices = bluetooth.discover_devices(lookup_names=True, lookup_class=True)
 
-    device_found = False
-    for addr, name, _ in nearby_devices:
-        if addr == device_mac:
-            device_found = True
-            break
+#     device_found = False
+#     for addr, name, _ in nearby_devices:
+#         if addr == device_mac:
+#             device_found = True
+#             break
 
-    if not device_found:
-        print(f"Device with MAC address {device_mac} not found.")
-        return None
+#     if not device_found:
+#         print(f"Device with MAC address {device_mac} not found.")
+#         return None
 
-    # Connect to the Bluetooth device
-    port = 1  # RFCOMM port number
-    socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-    socket.connect((device_mac, port))
-    subprocess.run(["sudo", "rfcomm", "bind", str(port), device_mac])
+#     # Connect to the Bluetooth device
+#     port = 1  # RFCOMM port number
+#     socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+#     socket.connect((device_mac, port))
+#     subprocess.run(["sudo", "rfcomm", "bind", str(port), device_mac])
 
-    print(f"Connected to {name} ({device_mac})")
-    return socket
+#     print(f"Connected to {name} ({device_mac})")
+#     return socket
 
 
 def open_serial_port(device_mac, port=1):
     # Open a serial communication port using the connected Bluetooth socket
     subprocess.run(["sudo", "rfcomm", "bind", str(port), device_mac])
-    ser = Serial("/dev/rfcomm1", baudrate=115200)
+    ser = Serial("/dev/rfcomm0", baudrate=115200)
     return ser
 
 
@@ -42,7 +42,7 @@ def main():
     Define the robot control unit to run the program.
     """
     device_mac = "78:21:84:B9:0A:1E"
-    port = 1  # RFCOMM port number
+    port = 0  # RFCOMM port number
 
     serial_port = open_serial_port(device_mac, port)
 
@@ -82,7 +82,7 @@ def main():
                     turn_control = 0
                     print("Turn control reset to 0")
         data = [forward_control, turn_control]
-        if counter == 5:
+        if counter == 2:
             counter = 0
             print((",".join(map(str, data)) + "\n").encode())
             try:
@@ -126,8 +126,8 @@ def main():
             current_time = pygame.time.get_ticks()
             if current_time - last_increment_time_turn >= decrement_interval:
                 turn_control += 5
-                if turn_control < 120:
-                    turn_control = 120
+                if turn_control < 255:
+                    turn_control = 255
                 turn_control = min(255, turn_control)
                 print("Turn control:", turn_control)
                 last_increment_time_turn = current_time
@@ -135,8 +135,8 @@ def main():
             current_time = pygame.time.get_ticks()
             if current_time - last_increment_time_turn >= decrement_interval:
                 turn_control -= 5
-                if turn_control > -120:
-                    turn_control = -120
+                if turn_control > -255:
+                    turn_control = -255
                 turn_control = max(-255, turn_control)
                 print("Turn control:", turn_control)
                 last_increment_time_turn = current_time

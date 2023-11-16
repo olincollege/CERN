@@ -9,8 +9,8 @@ BluetoothSerial SerialBT;
 char drive_control;
 const int a1a_drive = 33;
 const int a1b_drive = 32;
-const int b1a_drive = 23;
-const int b1b_drive = 2;
+const int b1a_drive = 2;
+const int b1b_drive = 23;
 
 const int a1a_turn = 12;
 const int a1b_turn = 14;
@@ -29,11 +29,13 @@ const int G2 = 19;
 const int B2 = 15;
 
 const int mostrig = 18;
+const int tiltread = 35;
 
 unsigned long previousMillis = 0;
 
 // Variables to store the state and timing information
 bool tilted = true;
+bool shutdown = false;
 unsigned long tiltStartTime = 0;
 unsigned long tiltDuration = 5000;  // 5 seconds in milliseconds
 int counter = 0;
@@ -56,6 +58,11 @@ void setup() {
   Serial.begin(115200);
   SerialBT.begin("Stubby");
   Serial.println("The device can be paired with Bluetooth");
+
+  pinMode(mostrig, OUTPUT);
+  digitalWrite(mostrig, 1);
+  pinMode(tiltread, INPUT);
+  
   pinMode(a1a_drive, OUTPUT);
   pinMode(a1b_drive, OUTPUT);
   pinMode(b1a_drive, OUTPUT);
@@ -113,6 +120,19 @@ void setup() {
 
   // Serial.println("");
   // delay(100);
+  pinMode(R1,OUTPUT);
+  digitalWrite(R1, 0);
+  delay(500);
+  digitalWrite(R1, 1);
+  pinMode(G1,OUTPUT);
+  digitalWrite(G1, 0);
+  pinMode(blue1,OUTPUT);
+  digitalWrite(blue1, 1);
+
+  pinMode(R2,OUTPUT);
+  digitalWrite(R2, 1);
+  pinMode(G2,OUTPUT);
+  digitalWrite(G2, 1);
 }
 
 
@@ -248,22 +268,37 @@ void stop_turn() {
 
 void kill_power(){
   // Read the state of the tilt switch
-  bool currentlyTilted = digitalRead(mostrig) == LOW;
+  bool currentlyTilted = (digitalRead(tiltread) == HIGH);
 
+  if (currentlyTilted)
+  {
+//    digitalWrite(R2,0);
+    digitalWrite(G2,1);
+  }
+  else
+  {
+//    digitalWrite(R2,1);
+    digitalWrite(G2,0);
+  }
   if (currentlyTilted != tilted) {
     // Tilt state has changed
     tilted = currentlyTilted;
     tiltStartTime = millis();  // Update the tilt start time
   }
 
-  if (tilted && millis() - tiltStartTime >= tiltDuration) {
+  if (tilted && ((millis() - tiltStartTime) >= tiltDuration)) {
     // Tilted for more than 5 seconds, assert LOW on tilt switch pin
+    shutdown=true;
+    digitalWrite(G1,1);
+    digitalWrite(blue1, 0);
+    delay(500);
+    digitalWrite(blue1, 1);
+  } 
+  else if(!tilted && shutdown && ((millis() - tiltStartTime) >= tiltDuration/5))
+  {
     digitalWrite(mostrig, LOW);
-  } else {
-    // If not tilted for more than 5 seconds, keep the tilt switch pin HIGH
-    digitalWrite(mostrig, HIGH);
-    tiltStartTime = millis();
   }
+
 
   // Add a small delay to avoid excessive loop iteration
   delay(10);
