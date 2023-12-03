@@ -36,6 +36,16 @@ const int power_pin = 34;
 
 unsigned long previousMillis = 0;  // Time keeping variable for power down sequence
 
+//LED Stuff
+bool currentlyTilted;
+bool wasTilted=false;
+int leftledcode[5]={0,0,0,0,0};
+int rightledcode[5]={0,0,0,0,0};
+int leftledcounters[2]={0,0};
+int rightledcounters[2]={0,0};
+int drive_power=0;
+int turn_power=0;
+
 // Variables to store the state and timing information
 bool tilted = true;
 bool shutdown = false;
@@ -119,39 +129,146 @@ void loop() {
   The leftmost integer represents the respective motor control for the forward driving motors while the rightmost
   integer is the turning motor power. */
 
-  int commaIndex = steering_controls.indexOf(',');  // To start, first find the location of where the comma is located in the string
-  if (commaIndex != -1) {
-    // counter++;
-    String first_part = steering_controls.substring(0, commaIndex);
-    int drive_power = first_part.toInt();
-    /* The first index of the string all the way to the 
-    index of the comma should be the integer of the drive motor. 
-    Convert this to an integer. */
+  parse_input(steering_controls);
 
-    String second_part = steering_controls.substring(commaIndex + 1, steering_controls.length());
-    int turn_power = second_part.toInt();
-    /* The following index of the comma all the way to the 
-    final index of the string should be the integer of the turn motor. 
-    Also convert this to an integer. */
 
-    if (drive_power > 0) {
-      forward(drive_power);  // If the user is pressing W on their keyboard, the user would like to move forward and so the first integer is positive.
-    } else if (drive_power < 0) {
-      backwards(drive_power * -1);  // If the user instead presses S, the user would like to move backwards which means that the motor power is negative.
-    } else {
-      stop_drive();  // If the user presses neither, the integer will be zero and the motor driver for the forward motors should be put to sleep.
-    }
-
-    if (turn_power > 0) {
-      right(turn_power);  // If the user is pressing D on their keyboard, the user would like to turn right so the second integer is positive.
-    } else if (turn_power < 0) {
-      left(turn_power * -1);  // If the user is pressing A on their keyboard, the user would like to turn left so the second integer is negative.
-    } else {
-      stop_turn();  // Like the drive motors, if neither is pressed, the second integer will be zero, and motor controls should not be sent to the turn motors.
-    }
+  if (drive_power > 0) {
+    forward(drive_power);  // If the user is pressing W on their keyboard, the user would like to move forward and so the first integer is positive.
+  } else if (drive_power < 0) {
+    backwards(drive_power * -1);  // If the user instead presses S, the user would like to move backwards which means that the motor power is negative.
+  } else {
+    stop_drive();  // If the user presses neither, the integer will be zero and the motor driver for the forward motors should be put to sleep.
   }
+
+  if (turn_power > 0) {
+    right(turn_power);  // If the user is pressing D on their keyboard, the user would like to turn right so the second integer is positive.
+  } else if (turn_power < 0) {
+    left(turn_power * -1);  // If the user is pressing A on their keyboard, the user would like to turn left so the second integer is negative.
+  } else {
+    stop_turn();  // Like the drive motors, if neither is pressed, the second integer will be zero, and motor controls should not be sent to the turn motors.
+  }
+  
   kill_power();  // At the end of the loop, run this function to see if the user would like to shut off the robot
   SerialBT.println(analogRead(power_pin));
+}
+
+void parse_input(String input)
+{
+  int currentindex=-1;
+  int numbercount=1;
+  while(true)
+  {
+    int nextindex=input.indexOf(',',currentindex+1);
+    if(nextindex==-1)
+    {
+      if(numbercount==1)
+      {
+        break;
+      }
+      String sub = input.substring(currentindex+1, input.length()); 
+      assign_input(sub.toInt(),numbercount);
+      break;
+    }
+    String sub = input.substring(currentindex+1, nextindex); 
+    assign_input(sub.toInt(),numbercount);
+    numbercount++;
+    currentindex=nextindex;
+  }
+}
+
+void assign_input(int value, int numbercount)
+{
+  switch(numbercount)
+  {
+    case 1: //drive power
+      drive_power=value;
+      break;
+    case 2: //turn power
+      turn_power=value;
+      break;
+    default:
+      if(numbercount<8)
+      {
+        leftledcode[(numbercount-3)%5]=value;
+      }
+      else
+      {
+        rightledcode[(numbercount-3)%5]=value;
+      }
+      break;
+  }
+}
+
+void led_control()
+{
+//  int leftledcode[5];
+//int rightledcode[5];
+//int leftledcounters[2];
+//int rightledcounters[2];
+//const int R1 = 17; // Pins for LED 1
+//const int G1 = 16;
+//const int blue1 = 4;
+//
+//const int R2 = 5; // Pins for LED 2
+//const int G2 = 19;
+//const int B2 = 15;
+  if(!currentlyTilted)
+  {
+    wasTilted=false;
+    //Left LED
+    if(leftledcounters[0]<leftledcode[3])
+    {
+      analogWrite(R1,255-leftledcode[0]);
+      analogWrite(G1,255-leftledcode[1]);
+      analogWrite(blue1,255-leftledcode[2]);
+      leftledcounters[0]++;
+    }
+    else if (leftledcounters[1]<leftledcode[4])
+    {
+      analogWrite(R1,255);
+      analogWrite(G1,255);
+      analogWrite(blue1,255);
+      leftledcounters[1]++;
+    }
+    else
+    {
+      leftledcounters[0]=0;
+      leftledcounters[1]=0;
+    }
+    //Right LED
+    if(rightledcounters[0]<rightledcode[3])
+    {
+      analogWrite(R2,255-rightledcode[0]);
+      analogWrite(G2,255-rightledcode[1]);
+      analogWrite(B2,255-rightledcode[2]);
+      rightledcounters[0]++;
+    }
+    else if (rightledcounters[1]<rightledcode[4])
+    {
+      analogWrite(R2,255);
+      analogWrite(G2,255);
+      analogWrite(B2,255);
+      rightledcounters[1]++;
+    }
+    else
+    {
+      rightledcounters[0]=0;
+      rightledcounters[1]=0;
+    }
+  }
+  else
+  {
+    if(!wasTilted)
+    {
+      analogWrite(R1,255);
+      analogWrite(G1,255);
+      analogWrite(blue1,255);
+      analogWrite(R2,255);
+      analogWrite(G2,255);
+      analogWrite(B2,255);
+    }
+    wasTilted=true;
+  }
 }
 
 void forward(int power_drive) {  // Run the robot forward by turning on the motor controller and setting the two positive inputs at a higher voltage.
@@ -202,34 +319,37 @@ void stop_turn() {  // Stop the turning of the robot by turning off the motor co
   analogWrite(b1b_turn, 0);
 }
 
-void kill_power() {  // Run through the sequence of  checking to see if the user would turn off the robot
+void kill_power(){ // Run through the sequence of  checking to see if the user would turn off the robot
 
-  bool currentlyTilted = (digitalRead(tiltread) == HIGH);
+  currentlyTilted = (digitalRead(tiltread) == HIGH);
 
-  if (currentlyTilted)  // Read the state of the tilt switch. If it is tilted approximately 60 degrees, the second green light will switch off
+  if (currentlyTilted) // Read the state of the tilt switch. If it is tilted approximately 60 degrees, the second green light will switch on
   {
-    //    digitalWrite(R2,0);
-    digitalWrite(G2, 1);
-  } else {
-    //    digitalWrite(R2,1);
-    digitalWrite(G2, 0);  // If not, the tilt switch will cause the green second light to turn on.
+//    digitalWrite(R2,0);
+    analogWrite(G2,0);
   }
-  if (currentlyTilted != tilted) {  // If the robot switches from being in a non tilted state to a tilted state, then start a timer
+  else
+  {
+//    digitalWrite(R2,1);
+//    digitalWrite(G2,0); // If not, the tilt switch will cause the green second light to turn on.
+  }
+  if (currentlyTilted != tilted) { // If the robot switches from being in a non tilted state to a tilted state, then start a timer
     // Tilt state has changed
     tilted = currentlyTilted;
     tiltStartTime = millis();  // Update the tilt start time
   }
 
-  if (tilted && ((millis() - tiltStartTime) >= tiltDuration)) {
+  if (tilted && ((millis() - tiltStartTime) >= tiltDuration)) { 
     /* If the amount of time the robot has been tilted for is greater than or equal to 5 seconds, 
     then run the shutoff command. */
 
-    shutdown = true;  // Tilted for more than 5 seconds, assert LOW on tilt switch pin
-    digitalWrite(G1, 1);
-    digitalWrite(blue1, 0);  // Flash the blue light to notify the user that the robot is about to turn off
+    shutdown = true; // Tilted for more than 5 seconds, assert LOW on tilt switch pin
+//    digitalWrite(G1,1);
+    analogWrite(blue1, 0); // Flash the blue light to notify the user that the robot is about to turn off
     delay(500);
-    digitalWrite(blue1, 1);
-  } else if (!tilted && shutdown && ((millis() - tiltStartTime) >= tiltDuration / 5))  // Once the robot has been tilted for more than 5 seconds, the robot has to be tilted up again to kill the power
+    analogWrite(blue1, 255);
+  } 
+  else if(!tilted && shutdown && ((millis() - tiltStartTime) >= tiltDuration/5)) // Once the robot has been tilted for more than 5 seconds, the robot has to be tilted up again to kill the power
   {
     digitalWrite(mostrig, LOW);
   }
@@ -237,4 +357,4 @@ void kill_power() {  // Run through the sequence of  checking to see if the user
 
   // Small delay to avoid excessive loop iteration
   delay(10);
-}
+} 

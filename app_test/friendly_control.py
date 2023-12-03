@@ -64,6 +64,7 @@ def main():
     last_increment_time_turn = 0
     decrement_interval = 25  # milliseconds
     counter = 0
+    led_code=""
 
     # Main game loop
     while True:
@@ -85,10 +86,12 @@ def main():
         data = [forward_control, turn_control]
         if counter == 2:
             counter = 0
-            print((",".join(map(str, data)) + "\n").encode())
+            message=(",".join(map(str, data)) +led_code+ "\n").encode()
+            print(message)
             try:
                 with serial_port as s:
-                    s.write((",".join(map(str, data)) + "\n").encode())
+                    s.write(message)
+                    led_code=""
                     battery_voltage = round(int(s.readline().decode()) * 2 / 1158, 2)
             except:
                 pass
@@ -96,6 +99,27 @@ def main():
 
         # Check for key presses
         keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_0]:
+            led_code=",0,0,0,0,1,0,0,0,0,1"
+        if keys[pygame.K_1]:
+            led_code=",255,0,0,1,1,0,0,255,1,1"
+        if keys[pygame.K_2]:
+            led_code=",255,255,255,1,0,255,255,255,1,0"
+        if keys[pygame.K_3]:
+            led_code=",255,255,0,1,0,255,255,0,1,0"
+        if keys[pygame.K_4]:
+            led_code=",255,0,255,1,0,255,0,255,1,0"
+        if keys[pygame.K_5]:
+            led_code=",0,255,255,1,0,0,255,255,1,0"
+        if keys[pygame.K_6]:
+            led_code=",255,0,0,1,0,255,0,0,1,0"
+        if keys[pygame.K_7]:
+            led_code=",0,255,0,1,0,0,255,0,1,0"
+        if keys[pygame.K_8]:
+            led_code=",0,0,255,1,0,0,0,255,1,0"
+        if keys[pygame.K_9]:
+            led_code=",255,255,255,4,20,255,255,255,4,20"
 
         if not keys[pygame.K_w] and not keys[pygame.K_s]:
             if forward_control > 120:
