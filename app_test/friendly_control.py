@@ -1,8 +1,8 @@
 import sys
 import pygame
+
 # import bluetooth
 import subprocess
-import time
 from serial import Serial
 
 
@@ -42,6 +42,7 @@ def main():
     Define the robot control unit to run the program.
     """
     device_mac = "78:21:84:B9:0A:1E"
+    # device_mac = "E0:5A:1B:E4:66:56"
     port = 0  # RFCOMM port number
 
     serial_port = open_serial_port(device_mac, port)
@@ -57,6 +58,7 @@ def main():
     # Set up variables
     forward_control = 0
     turn_control = 0
+    battery_voltage = 0.0
     font = pygame.font.Font(None, 36)
     last_increment_time_forward = 0
     last_increment_time_turn = 0
@@ -76,7 +78,6 @@ def main():
             # Check for key releases
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w or event.key == pygame.K_s:
-                    forward_control = 0
                     print("Forward control reset to 0")
                 if event.key in (pygame.K_a, pygame.K_d):
                     turn_control = 0
@@ -88,6 +89,7 @@ def main():
             try:
                 with serial_port as s:
                     s.write((",".join(map(str, data)) + "\n").encode())
+                    battery_voltage = round(int(s.readline().decode()) * 2 / 1158, 2)
             except:
                 pass
         counter += 1
@@ -95,9 +97,13 @@ def main():
         # Check for key presses
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w] and keys[pygame.K_s]:
-            forward_control = forward_control
-            print("Forward control:", forward_control)
+        if not keys[pygame.K_w] and not keys[pygame.K_s]:
+            if forward_control > 120:
+                forward_control -= 11
+            elif forward_control < -120:
+                forward_control += 11
+            if abs(forward_control) <= 120:
+                forward_control = 0
         elif keys[pygame.K_w]:
             current_time = pygame.time.get_ticks()
             if current_time - last_increment_time_forward >= decrement_interval:
@@ -149,8 +155,10 @@ def main():
             f"Forward control: {forward_control}", True, (0, 0, 0)
         )
         text_turn = font.render(f"Turn control: {turn_control}", True, (0, 0, 0))
+        text_battery = font.render(f"Battery: {battery_voltage} V", True, (0, 0, 0))
         screen.blit(text_forward, (10, 10))
         screen.blit(text_turn, (10, 50))
+        screen.blit(text_battery, (10, 90))
 
         # Update the display
         pygame.display.flip()
