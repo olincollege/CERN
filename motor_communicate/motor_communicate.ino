@@ -99,21 +99,19 @@ void setup() {
   digitalWrite(sleep_drive, 0);
   digitalWrite(sleep_turn, 0);
 
-  pinMode(R1, OUTPUT);  // Turn on the red light of LED 1 to notify the user that the robot has turned on. Then turn off
-  digitalWrite(R1, 0);
-  delay(500);
-  digitalWrite(R1, 1);
+  pinMode(R1,OUTPUT); /* Go through a lighting sequence to notify the user that the IMU is reading. 
+                         A green light will activate telling the user that the setup is complete*/
+  pinMode(G1,OUTPUT);
+  pinMode(blue1,OUTPUT);
+  pinMode(R2,OUTPUT);
+  pinMode(G2,OUTPUT);
+  pinMode(B2,OUTPUT);
+  
+  analogWrite(G1, 0);
+  analogWrite(blue1, 255);
 
-  pinMode(G1, OUTPUT); /* Go through a lighting sequence to notify the user that the IMU is reading. 
-                         A green light will activate telling the user that the setup is complete. */
-  digitalWrite(G1, 0);
-  pinMode(blue1, OUTPUT);
-  digitalWrite(blue1, 1);
-
-  pinMode(R2, OUTPUT);
-  digitalWrite(R2, 1);
-  pinMode(G2, OUTPUT);
-  digitalWrite(G2, 1);
+  analogWrite(R2, 255);
+  analogWrite(G2, 255);
 
   // Once the green light has been turned on, the setup is complete
 }
@@ -123,7 +121,6 @@ void loop() {
   /* The loop is active when the user is connected to the robot via the control application that sends
   commands over Bluetooth serial to control the robot through WASD keys */
 
-  int loop = 0;
   String steering_controls = SerialBT.readStringUntil('\n');
   /* Over the serial, every user control has two comma separated integers ranging from -255 to 255 for both integers.
   The leftmost integer represents the respective motor control for the forward driving motors while the rightmost
@@ -147,7 +144,7 @@ void loop() {
   } else {
     stop_turn();  // Like the drive motors, if neither is pressed, the second integer will be zero, and motor controls should not be sent to the turn motors.
   }
-  
+  led_control();
   kill_power();  // At the end of the loop, run this function to see if the user would like to shut off the robot
   SerialBT.println(analogRead(power_pin));
 }
