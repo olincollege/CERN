@@ -33,6 +33,9 @@ const int mostrig = 18;  // Pin readouts for power on and power off sequence
 const int tiltread = 35;
 
 const int power_pin = 34;
+const int MPU6050_ADDR = 0x68;  // MPU6050 I2C address
+const float ACC_SCALE = 16384.0; // MPU6050 accelerometer sensitivity: 16384 LSB/G
+const float GYRO_SCALE = 131.0;  // MPU6050 gyroscope sensitivity: 131 LSB/°/s
 
 unsigned long previousMillis = 0;  // Time keeping variable for power down sequence
 
@@ -109,6 +112,11 @@ void setup() {
   
   analogWrite(G1, 0);
   analogWrite(blue1, 255);
+  Wire.begin(); // Initialize comunication
+  Wire.beginTransmission(MPU6050_ADDR);
+  Wire.write(0x6B);  // PWR_MGMT_1 register
+  Wire.write(0);     // Clear the sleep bit
+  Wire.endTransmission(true);
 
   analogWrite(R2, 255);
   analogWrite(G2, 255);
@@ -127,6 +135,29 @@ void loop() {
   integer is the turning motor power. */
 
   parse_input(steering_controls);
+  float y_accel = 0.0;
+
+  for (int record = 0; record < 50; record++){
+    float accelX_G, accelY_G, accelZ_G, gyroX_rad, gyroY_rad, gyroZ_rad;
+    readMPU6050Data(accelX_G, accelY_G, accelZ_G, gyroX_rad, gyroY_rad, gyroZ_rad);
+    y_accel = y_accel + accelY_G;
+  }
+
+  y_accel = y_accel/50;
+  if (abs(y_accel) > 0.15){
+    if (y_accel > 0){
+      turn_power = turn_power - 60 - 120*y_accel;
+      if (turn_power < -255){
+        turn_power = -255;
+      }
+    } else if (y_accel < 0){
+      turn_power = turn_power + 60 + 120*y_accel;
+      if (turn_power > 255){
+        turn_power = 255;
+      }
+    }
+
+  }
 
 
   if (drive_power > 0) {
@@ -147,6 +178,33 @@ void loop() {
   led_control();
   kill_power();  // At the end of the loop, run this function to see if the user would like to shut off the robot
   SerialBT.println(analogRead(power_pin));
+}
+
+void readMPU6050Data(float &accelX_G, float &accelY_G, float &accelZ_G, float &gyroX_rad, float &gyroY_rad, float &gyroZ_rad) {
+  Wire.beginTransmission(MPU6050_ADDR);
+  Wire.write(0x3B);  // Starting register for accelerometer data
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU6050_ADDR, 14, true);  // Request 14 bytes of data
+  int16_t accelX, accelY, accelZ, gyroX, gyroY, gyroZ;
+
+  accelX = Wire.read() << 8 | Wire.read();
+  accelY = Wire.read() << 8 | Wire.read();
+  accelZ = Wire.read() << 8 | Wire.read();
+
+  Wire.read();  // Skip 2 bytes of temperature data
+
+  gyroX = Wire.read() << 8 | Wire.read();
+  gyroY = Wire.read() << 8 | Wire.read();
+  gyroZ = Wire.read() << 8 | Wire.read();
+
+  accelX_G = accelX / ACC_SCALE;
+  accelY_G = accelY / ACC_SCALE;
+  accelZ_G = accelZ / ACC_SCALE;
+
+  // Normalize gyroscope data to radians per second
+  gyroX_rad = gyroX / GYRO_SCALE * 57.2958;
+  gyroY_rad = gyroY / GYRO_SCALE * 57.2958;
+  gyroZ_rad = gyroZ / GYRO_SCALE * 57.2958;
 }
 
 void parse_input(String input)
