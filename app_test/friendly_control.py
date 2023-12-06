@@ -63,8 +63,14 @@ def main():
     last_increment_time_forward = 0
     last_increment_time_turn = 0
     decrement_interval = 25  # milliseconds
+    r_screen = 255
+    g_screen = 255
+    b_screen = 255
+    r_text = 0
+    g_text = 0
+    b_text = 0
     counter = 0
-    led_code=""
+    led_code = ""
 
     # Main game loop
     while True:
@@ -86,12 +92,12 @@ def main():
         data = [forward_control, turn_control]
         if counter == 2:
             counter = 0
-            message=(",".join(map(str, data)) +led_code+ "\n").encode()
+            message = (",".join(map(str, data)) + led_code + "\n").encode()
             print(message)
             try:
                 with serial_port as s:
                     s.write(message)
-                    led_code=""
+                    led_code = ""
                     battery_voltage = round(int(s.readline().decode()) * 2 / 1158, 2)
             except:
                 pass
@@ -101,25 +107,85 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_0]:
-            led_code=",0,0,0,0,1,0,0,0,0,1"
+            led_code = ",0,0,0,0,1,0,0,0,0,1"
+            r_screen = 0
+            g_screen = 0
+            b_screen = 0
+            r_text = 255
+            g_text = 255
+            b_text = 255
         if keys[pygame.K_1]:
-            led_code=",255,0,0,1,1,0,0,255,1,1"
+            led_code = ",255,0,0,1,1,0,0,255,1,1"
+            r_screen = 255
+            g_screen = 0
+            b_screen = 0
+            r_text = 0
+            g_text = 0
+            b_text = 255
         if keys[pygame.K_2]:
-            led_code=",255,255,255,1,0,255,255,255,1,0"
+            led_code = ",255,255,255,1,0,255,255,255,1,0"
+            r_screen = 255
+            g_screen = 255
+            b_screen = 255
+            r_text = 0
+            g_text = 0
+            b_text = 0
         if keys[pygame.K_3]:
-            led_code=",255,255,0,1,0,255,255,0,1,0"
+            led_code = ",255,255,0,1,0,255,255,0,1,0"
+            r_screen = 255
+            g_screen = 255
+            b_screen = 0
+            r_text = 0
+            g_text = 0
+            b_text = 255
         if keys[pygame.K_4]:
-            led_code=",255,0,255,1,0,255,0,255,1,0"
+            led_code = ",255,0,255,1,0,255,0,255,1,0"
+            r_screen = 255
+            g_screen = 0
+            b_screen = 255
+            r_text = 0
+            g_text = 255
+            b_text = 0
         if keys[pygame.K_5]:
-            led_code=",0,255,255,1,0,0,255,255,1,0"
+            led_code = ",0,255,255,1,0,0,255,255,1,0"
+            r_screen = 0
+            g_screen = 255
+            b_screen = 255
+            r_text = 255
+            g_text = 0
+            b_text = 0
         if keys[pygame.K_6]:
-            led_code=",255,0,0,1,0,255,0,0,1,0"
+            led_code = ",255,0,0,1,0,255,0,0,1,0"
+            r_screen = 255
+            g_screen = 0
+            b_screen = 0
+            r_text = 0
+            g_text = 255
+            b_text = 255
         if keys[pygame.K_7]:
-            led_code=",0,255,0,1,0,0,255,0,1,0"
+            led_code = ",0,255,0,1,0,0,255,0,1,0"
+            r_screen = 0
+            g_screen = 255
+            b_screen = 0
+            r_text = 255
+            g_text = 0
+            b_text = 255
         if keys[pygame.K_8]:
-            led_code=",0,0,255,1,0,0,0,255,1,0"
+            led_code = ",0,0,255,1,0,0,0,255,1,0"
+            r_screen = 0
+            g_screen = 0
+            b_screen = 255
+            r_text = 255
+            g_text = 255
+            b_text = 0
         if keys[pygame.K_9]:
-            led_code=",255,255,255,4,20,255,255,255,4,20"
+            led_code = ",255,255,255,4,20,255,255,255,4,20"
+            r_screen = 255
+            g_screen = 255
+            b_screen = 255
+            r_text = 0
+            g_text = 0
+            b_text = 0
 
         if not keys[pygame.K_w] and not keys[pygame.K_s]:
             if forward_control > 120:
@@ -172,14 +238,18 @@ def main():
                 last_increment_time_turn = current_time
 
         # Clear the screen
-        screen.fill((255, 255, 255))
+        screen.fill((r_screen, g_screen, b_screen))
 
         # Display the controls on the screen
         text_forward = font.render(
-            f"Forward control: {forward_control}", True, (0, 0, 0)
+            f"Forward control: {forward_control}", True, (r_text, g_text, b_text)
         )
-        text_turn = font.render(f"Turn control: {turn_control}", True, (0, 0, 0))
-        text_battery = font.render(f"Battery: {battery_voltage} V", True, (0, 0, 0))
+        text_turn = font.render(
+            f"Turn control: {turn_control}", True, (r_text, g_text, b_text)
+        )
+        text_battery = font.render(
+            f"Battery: {battery_voltage} V", True, (r_text, g_text, b_text)
+        )
         screen.blit(text_forward, (10, 10))
         screen.blit(text_turn, (10, 50))
         screen.blit(text_battery, (10, 90))
