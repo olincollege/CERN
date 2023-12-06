@@ -39,6 +39,11 @@ const float GYRO_SCALE = 131.0;  // MPU6050 gyroscope sensitivity: 131 LSB/°/s
 
 unsigned long previousMillis = 0;  // Time keeping variable for power down sequence
 
+const uint32_t IDLE_MAX = 300000;
+uint32_t last_drive_input;
+uint32_t t;
+double batt_voltage;
+
 //LED Stuff
 bool currentlyTilted;
 bool wasTilted=false;
@@ -71,9 +76,25 @@ void setup() {
   Serial.begin(115200);
   SerialBT.begin("Girthy");  // When turned on, start broadcasting a Bluetooth module that everyone can see and connect to
 
-
+  delay(500);
+  batt_voltage=(double)analogRead(power_pin)*2/1158;
   pinMode(mostrig, OUTPUT);
-  digitalWrite(mostrig, 1);  // Activate the mostrig pin which tells the robot to power on
+  if(batt_voltage>3.3)
+  {
+    digitalWrite(mostrig, 1);  // Activate the mostrig pin which tells the robot to power on
+  }
+  else
+  {
+    for(int i=0; i<10; i++)
+    {
+      analogWrite(R2, 255);
+      analogWrite(R1, 0);
+      delay(20);
+      analogWrite(R1, 255);
+      analogWrite(R2, 0);
+      delay(20);
+    }
+  }
   pinMode(tiltread, INPUT);
 
   pinMode(a1a_drive, OUTPUT);  // Set all motor output pins as a PWM output to drive the motor
@@ -117,6 +138,8 @@ void setup() {
   Wire.write(0x6B);  // PWR_MGMT_1 register
   Wire.write(0);     // Clear the sleep bit
   Wire.endTransmission(true);
+
+  last_drive_input=millis();
 
   analogWrite(R2, 255);
   analogWrite(G2, 255);
@@ -176,8 +199,18 @@ void loop() {
     stop_turn();  // Like the drive motors, if neither is pressed, the second integer will be zero, and motor controls should not be sent to the turn motors.
   }
   led_control();
+  batt_voltage=(double)analogRead(power_pin)*2/1158;
+  SerialBT.println(batt_voltage);
   kill_power();  // At the end of the loop, run this function to see if the user would like to shut off the robot
-  SerialBT.println(analogRead(power_pin));
+}
+
+/*
+** Returns a boolean value that indicates whether the current time, t, is later than some prior
+** time, t0, plus a given interval, dt.  The condition accounts for timer overflow / wraparound.
+*/
+bool it_is_time(uint32_t t, uint32_t t0, uint32_t dt) {
+  return ((t >= t0) && (t - t0 >= dt)) ||         // The first disjunct handles the normal case
+         ((t < t0) && (t + (~t0) + 1 >= dt));  //   while the second handles the overflow case
 }
 
 void readMPU6050Data(float &accelX_G, float &accelY_G, float &accelZ_G, float &gyroX_rad, float &gyroY_rad, float &gyroZ_rad) {
@@ -221,6 +254,11 @@ void parse_input(String input)
         break;
       }
       String sub = input.substring(currentindex+1, input.length()); 
+      if(sub.equals("shutdown"))
+      {
+        initiate_shutdown();
+        break;
+      }
       assign_input(sub.toInt(),numbercount);
       break;
     }
@@ -332,6 +370,7 @@ void forward(int power_drive) {  // Run the robot forward by turning on the moto
   analogWrite(b1a_drive, power_drive);
   analogWrite(a1b_drive, 0);
   analogWrite(b1b_drive, 0);
+  last_drive_input=millis();
 }
 
 void backwards(int power_drive) {  // Run the robot backwards by turning on the motor controller and setting the two negative inputs at a higher voltage.
@@ -340,6 +379,7 @@ void backwards(int power_drive) {  // Run the robot backwards by turning on the 
   analogWrite(b1a_drive, 0);
   analogWrite(a1b_drive, power_drive);
   analogWrite(b1b_drive, power_drive);
+  last_drive_input=millis();
 }
 
 void stop_drive() {  // Stop the robot by turning off the motor controller and setting each of the drive pins to 0 volts.
@@ -397,19 +437,27 @@ void kill_power(){ // Run through the sequence of  checking to see if the user w
   if (tilted && ((millis() - tiltStartTime) >= tiltDuration)) { 
     /* If the amount of time the robot has been tilted for is greater than or equal to 5 seconds, 
     then run the shutoff command. */
+    initiate_shutdown();
 
-    shutdown = true; // Tilted for more than 5 seconds, assert LOW on tilt switch pin
-//    digitalWrite(G1,1);
-    analogWrite(blue1, 0); // Flash the blue light to notify the user that the robot is about to turn off
-    delay(500);
-    analogWrite(blue1, 255);
   } 
   else if(!tilted && shutdown && ((millis() - tiltStartTime) >= tiltDuration/5)) // Once the robot has been tilted for more than 5 seconds, the robot has to be tilted up again to kill the power
   {
     digitalWrite(mostrig, LOW);
   }
-
+  if (it_is_time(millis(), last_drive_input, IDLE_MAX))
+  {
+    initiate_shutdown();
+  }
 
   // Small delay to avoid excessive loop iteration
   delay(10);
 } 
+
+void initiate_shutdown()
+{
+    shutdown = true; // Tilted for more than 5 seconds, assert LOW on tilt switch pin
+//    digitalWrite(G1,1);
+    analogWrite(blue1, 0); // Flash the blue light to notify the user that the robot is about to turn off
+    delay(500);
+    analogWrite(blue1, 255);
+}

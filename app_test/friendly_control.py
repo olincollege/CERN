@@ -58,7 +58,7 @@ def main():
     # Set up variables
     forward_control = 0
     turn_control = 0
-    battery_voltage = 0.0
+    battery_voltage = 4.2
     font = pygame.font.Font(None, 36)
     last_increment_time_forward = 0
     last_increment_time_turn = 0
@@ -84,7 +84,7 @@ def main():
 
             # Check for key releases
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_w or event.key == pygame.K_s:
+                if event.key == pygame.K_s or event.key == pygame.K_w:
                     print("Forward control reset to 0")
                 if event.key in (pygame.K_a, pygame.K_d):
                     turn_control = 0
@@ -92,13 +92,15 @@ def main():
         data = [forward_control, turn_control]
         if counter == 2:
             counter = 0
-            message = (",".join(map(str, data)) + led_code + "\n").encode()
-            print(message)
             try:
                 with serial_port as s:
+                    message = (",".join(map(str, data)) + led_code + "\n").encode()
+                    print(message)
                     s.write(message)
                     led_code = ""
-                    battery_voltage = round(int(s.readline().decode()) * 2 / 1158, 2)
+                    reading=s.readline().decode()
+                    battery_voltage = round(float(reading), 2)
+                    print(battery_voltage)
             except:
                 pass
         counter += 1
@@ -186,15 +188,23 @@ def main():
             r_text = 0
             g_text = 0
             b_text = 0
+        if keys[pygame.K_k] or float(battery_voltage)<3.1:
+            led_code = ",shutdown"
+            r_screen = 0
+            g_screen = 0
+            b_screen = 0
+            r_text = 0
+            g_text = 0
+            b_text = 0
 
-        if not keys[pygame.K_w] and not keys[pygame.K_s]:
+        if not keys[pygame.K_s] and not keys[pygame.K_w]:
             if forward_control > 120:
                 forward_control -= 11
             elif forward_control < -120:
                 forward_control += 11
             if abs(forward_control) <= 120:
                 forward_control = 0
-        elif keys[pygame.K_w]:
+        elif keys[pygame.K_s]:
             current_time = pygame.time.get_ticks()
             if current_time - last_increment_time_forward >= decrement_interval:
                 forward_control = 255
@@ -204,7 +214,7 @@ def main():
                 print("Forward control:", forward_control)
                 last_increment_time_forward = current_time
         # Check for key presses
-        elif keys[pygame.K_s]:
+        elif keys[pygame.K_w]:
             current_time = pygame.time.get_ticks()
             if current_time - last_increment_time_forward >= decrement_interval:
                 forward_control = -255
