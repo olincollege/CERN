@@ -41,8 +41,9 @@ def main():
     """
     Define the robot control unit to run the program.
     """
-    # device_mac = "78:21:84:B9:0A:1E"
-    device_mac = "E0:5A:1B:E4:66:56"
+    device_mac = "78:21:84:B9:0A:1E" #stubby
+    # device_mac = "E0:5A:1B:E4:66:56" #girthy
+    # device_mac = "E0:5A:1B:E4:9D:D6" #kirby
     port = 0  # RFCOMM port number
 
     serial_port = open_serial_port(device_mac, port)

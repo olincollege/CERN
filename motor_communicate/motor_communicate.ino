@@ -8,18 +8,19 @@ Adafruit_MPU6050 mpu;      // Module for the IMU
 BluetoothSerial SerialBT;  // Module for Bluetooth
 
 char drive_control;
-const int a1a_turn = 2;  // Pins for the turning/slow/pivotal motors
-const int a1b_turn = 23;
-const int b1a_turn = 32;
-const int b1b_turn = 33;
+const int a1a_turn = 12;  // Pins for the turning/slow/pivotal motors
+const int a1b_turn = 14; //girthy 2,23,32,33
+const int b1a_turn = 27; //stubby 12,14,27,26
+const int b1b_turn = 26;
 
-const int a1a_drive = 26; // Pins for the drive/fast/forward moving motors 
-const int a1b_drive = 27;
-const int b1a_drive = 14;
-const int b1b_drive = 12;
+const int a1a_drive = 33; // Pins for the drive/fast/forward moving motors 
+const int a1b_drive = 32; //girthy 26,27,14,12
+const int b1a_drive = 2; //stubby 33,32,2,23
+const int b1b_drive = 23;
 
-const int sleep_drive = 13;  // Motor sleep pins for the motor controllers
-const int sleep_turn = 25;
+const int sleep_drive = 25;  // Motor sleep pins for the motor controllers
+const int sleep_turn = 13;   //girthy 13,25
+                             //stubby 25,13
 
 const int R1 = 17;  // Pins for LED 1
 const int G1 = 16;
@@ -74,7 +75,7 @@ void light_test(int power_turn);
 
 void setup() {
   Serial.begin(115200);
-  SerialBT.begin("Girthy");  // When turned on, start broadcasting a Bluetooth module that everyone can see and connect to
+  SerialBT.begin("Stubby");  // When turned on, start broadcasting a Bluetooth module that everyone can see and connect to
 
   delay(500);
   batt_voltage=(double)analogRead(power_pin)*2/1158;
@@ -167,7 +168,7 @@ void loop() {
   }
 
   y_accel = y_accel/50;
-  if (abs(y_accel) > 0.15){
+  if ((drive_power!=0) && (abs(y_accel) > 0.15)){
     if (y_accel > 0){
       turn_power = turn_power - 60 - 120*y_accel;
       if (turn_power < -255){
