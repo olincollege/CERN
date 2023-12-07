@@ -1,0 +1,31 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid 85f8f747-8376-4af6-9da4-afbb0f4bcd36)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (sheet (at 33.02 36.83) (size 41.91 21.59) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid c5aef724-8676-4c81-889e-041c5ca81271)
+    (property "Sheetname" "Induction Charging" (at 33.02 36.1184 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "induction.kicad_sch" (at 33.02 59.0046 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "kicad"
+        (path "/85f8f747-8376-4af6-9da4-afbb0f4bcd36" (page "2"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

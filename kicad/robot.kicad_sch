@@ -1,0 +1,31 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid 9f6eb88e-d254-4b8d-b64f-838940a89234)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (sheet (at 24.13 21.59) (size 52.07 46.99) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 50902c9c-c184-4e8b-b7c8-1add935d161c)
+    (property "Sheetname" "Temporary" (at 24.13 20.8784 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "birdsarentreal.kicad_sch" (at 24.13 69.1646 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "robot"
+        (path "/9f6eb88e-d254-4b8d-b64f-838940a89234" (page "2"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)
