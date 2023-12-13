@@ -346,6 +346,10 @@
     [
       "e305aaec-b373-422a-b2cb-386e797e1bef",
       "Oscillator"
+    ],
+    [
+      "dc26ba04-3753-4e96-982e-5e21f9af1db8",
+      "Resonant Inverter"
     ]
   ],
   "text_variables": {}
