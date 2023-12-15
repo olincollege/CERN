@@ -15,7 +15,7 @@ The repository has a set of 4 folders which each have important information rega
 `app_interface` contains the Python script file required to run our control interface for our robots
 
 ### kicad
-`kicad` contains a set of schematics and PCB board designs utilized in our project
+`kicad` contains a set of schematics and PCB board designs utilized in our project. Inside this folder, the `kicad.kicad_sch` file contains the transmitting circuit for the inductive charging base station. `robot.kicad_sch` and `robot.kicad_pcb` contain the circuit and PCB respectively for the receiving end of the charging circuit and the control circuitry placed inside our robot.
 
 ### motor_communicate
 `motor_communicate` contains the C++ firmware required to run the robot.

@@ -324,32 +324,8 @@
   },
   "sheets": [
     [
-      "85f8f747-8376-4af6-9da4-afbb0f4bcd36",
+      "5b151113-3859-4d4d-83ae-745492bd149f",
       ""
-    ],
-    [
-      "c5aef724-8676-4c81-889e-041c5ca81271",
-      "Induction Charging"
-    ],
-    [
-      "21e3db0c-d2b0-4a17-bcaa-ead1011110c2",
-      "Battery Voltage Sense"
-    ],
-    [
-      "0d434051-61a0-4fbe-901c-f60745b8de0a",
-      "Current limiter"
-    ],
-    [
-      "fc8dac7e-9819-43f4-862a-282958183a28",
-      "Overvoltage & current protector"
-    ],
-    [
-      "e305aaec-b373-422a-b2cb-386e797e1bef",
-      "Oscillator"
-    ],
-    [
-      "dc26ba04-3753-4e96-982e-5e21f9af1db8",
-      "Resonant Inverter"
     ]
   ],
   "text_variables": {}
